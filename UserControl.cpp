@@ -1,0 +1,199 @@
+#include "UserControl.h"
+#include <stdio.h>
+
+UserControl::UserControl(HINSTANCE hInstance) : hInstance(hInstance), hwnd(NULL) {
+    WNDCLASSEX wc = {0};
+    wc.cbSize = sizeof(WNDCLASSEX);
+    wc.style = 0;
+    wc.lpfnWndProc = UserControl::WndProc; // ウィンドウプロシージャを設定
+    wc.cbClsExtra = 0;
+    wc.cbWndExtra = 0;
+    wc.hInstance = hInstance;
+    wc.hIcon = LoadIcon(NULL, IDI_APPLICATION); // アイコンをロード
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW); // カーソルをロード
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1); // 背景色を設定
+    wc.lpszMenuName = NULL;
+    wc.lpszClassName = className; // クラス名を設定
+    wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION); // 小さいアイコンをロード
+
+    RegisterClassEx(&wc); // ウィンドウクラスを登録
+}
+
+UserControl::~UserControl() {
+    UnregisterClass(className, hInstance); // ウィンドウクラスを登録解除
+}
+
+bool UserControl::Create(LPCTSTR lpWindowName) {
+     int nWidth = 600, nHeight = 510;
+    hwnd = CreateWindowEx(
+        WS_EX_CLIENTEDGE,
+        className,
+        lpWindowName,
+        WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, nWidth, nHeight,
+        NULL, NULL, hInstance, this
+    );
+
+    char login_user_info[128];
+    sprintf(login_user_info, "User Name : %s\nAuthority : %s", username, authority);
+    printf("%s\n", login_user_info);
+
+    if (hwnd != NULL) {
+        // タイトル・ユーザー情報ラベルを作成
+        {
+            // タイトルラベルを作成
+            Lab_Title = CreateWindowEx(
+                0, 
+                "STATIC",              // ボタンクラス名
+                "Main Menu",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
+                10, 10, 200, 36,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+            // タイトルラベルにフォントを適用
+            SendMessage(Lab_Title, WM_SETFONT, (WPARAM)hFont_windowtitle, TRUE);
+
+            // ユーザー情報ラベルを作成
+            Lab_UserInformation=CreateWindowEx(
+                0, 
+                "STATIC",              // ボタンクラス名
+                login_user_info,           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
+                250, 10, 250, 50,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Lab_UserInformation, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+        }
+
+        // ユーザー管理ボタンを作成
+        {
+            // ボタンを作成
+            Btn_UserControl=CreateWindowEx(
+                0, 
+                "BUTTON",              // ボタンクラス名
+                "Users Control",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
+                50, 150, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)Btn_MainMenu_UserControl,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+
+            // ボタンにフォントを適用
+                SendMessage(Btn_UserControl, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+        }
+
+        // チャート検索ボタンを作成
+        {
+            // ボタンを作成
+            Btn_SearchChart=CreateWindowEx(
+                0, 
+                "BUTTON",              // ボタンクラス名
+                "Search Chart",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
+                280, 150, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)Btn_MainMenu_UserControl,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+
+            // ボタンにフォントを適用
+                SendMessage(Btn_SearchChart, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+        }
+
+        // チャート発行ボタンを作成
+        {
+            // ボタンを作成
+            Btn_IssueChart=CreateWindowEx(
+                0, 
+                "BUTTON",              // ボタンクラス名
+                "Issue Chart",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
+                50, 250, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)Btn_MainMenu_UserControl,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+
+            // ボタンにフォントを適用
+                SendMessage(Btn_IssueChart, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+        }
+
+        // CLOSEボタンを作成
+        {
+            // ボタンを作成
+            Btn_Close=CreateWindowEx(
+                0, 
+                "BUTTON",              // ボタンクラス名
+                "CLOSE",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
+                280, 250, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)Btn_MainMenu_UserControl,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+
+            // ボタンにフォントを適用
+                SendMessage(Btn_Close, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+        }
+    }
+
+    return hwnd != NULL;
+}
+
+void UserControl::Show(int nCmdShow) {
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+}
+
+HWND UserControl::GetHwnd() const {
+    return hwnd;
+}
+
+LRESULT CALLBACK UserControl::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
+        case WM_COMMAND:{
+            int wmId = LOWORD(wParam);
+            Btn_click(wmId,hwnd, msg, wParam, lParam);
+            break;
+        }
+        case WM_CTLCOLORSTATIC: {
+            // STATIC コントロールの背景色を設定
+            HDC hdcStatic = (HDC)wParam;
+            SetBkColor(hdcStatic, RGB(255, 255, 255)); // 背景色を白に設定
+            SetTextColor(hdcStatic, RGB(0, 0, 0));    // 文字色を黒に設定
+            return (LRESULT)CreateSolidBrush(RGB(255, 255, 255)); // 背景色のブラシを返す
+        }
+        case WM_CLOSE:
+            DestroyWindow(hwnd);
+            break;
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            break;
+        default:
+            return DefWindowProc(hwnd, msg, wParam, lParam);
+    }
+    return 0;
+}
+
+void UserControl::Btn_click(int wmId,HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
+    switch (wmId){
+        case Btn_MainMenu_UserControl:
+            MessageBox(hwnd, "UserControl Clicked!", "Info", MB_OK | MB_ICONINFORMATION);
+            break;
+        default:
+            break;
+    }
+}
