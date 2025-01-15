@@ -9,6 +9,7 @@ MainMenu::MainMenu(HINSTANCE hInstane, const Users& user) : hInstance(hInstance)
     strncat(username, login_user.get_pandaID(), sizeof(username) - strlen(username) - 1);
     strncat(authority, login_user.get_authority(), sizeof(authority) - strlen(authority) - 1);
 
+    
     WNDCLASSEX wc = {0};
     wc.cbSize = sizeof(WNDCLASSEX);
     wc.style = 0;

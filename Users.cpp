@@ -20,7 +20,7 @@ Users::Users(){
         return;
     }
 
-    search_users(userid);
+    //search_users(userid);
     return;
 }
 
@@ -64,6 +64,7 @@ const char* Users::get_userposition(){
 }
 
 const char* Users::get_authority(){
+    printf("Authority : %s\n",Authority);
     return Authority;
 }
 
