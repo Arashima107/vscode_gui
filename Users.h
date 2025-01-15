@@ -1,6 +1,8 @@
 #ifndef USERS_H
 #define USERS_H
 
+#define size_char sizeof(char)
+
 class Users {
 private:
     char db_path[256] = "C:\\users\\water\\desktop\\vscode_gui\\??";
@@ -12,7 +14,7 @@ private:
     char UserDivision[128] = "Unknown"; // ユーザーの部署（初期値: "Unknown"）
     char UserPosition[32] = "Unknown";  // ユーザーの役職（初期値: "Unknown"）
     char Authority[32] = "View";       // ユーザーの権限（初期値: "View"）
-    char password[8] = "";             // ユーザーのパスワード（初期値: ""）
+    char Password[8] = "";             // ユーザーのパスワード（初期値: ""）
 
 public:
     // コンストラクタ（デフォルトコンストラクタと引数付きコンストラクタ）
@@ -33,12 +35,12 @@ public:
     bool judge_password(const char* users_password);  // パスワードが一致するか判定
 
     // ユーザー情報の設定関数
-    bool set_pandaID(char* users_pandaID);           // Panda ID を設定
-    bool set_UserName(char* users_username);         // ユーザー名を設定
-    bool set_UserDivision(char* users_division);     // ユーザーの部署を設定
-    bool set_Position(char* users_position);         // ユーザーの役職を設定
-    bool set_authority(char* users_authority);       // ユーザーの権限を設定
-    bool set_Password(char* users_password);         // ユーザーのパスワードを設定
+    bool set_pandaID(const char* users_pandaID);           // Panda ID を設定
+    bool set_UserName(const char* users_username);         // ユーザー名を設定
+    bool set_UserDivision(const char* users_division);     // ユーザーの部署を設定
+    bool set_Position(const char* users_position);         // ユーザーの役職を設定
+    bool set_authority(const char* users_authority);       // ユーザーの権限を設定
+    bool set_Password(const char* users_password);         // ユーザーのパスワードを設定
 };
 
 #endif // USERS_H

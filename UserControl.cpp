@@ -178,7 +178,7 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
             Lab_UserDiv=CreateWindowEx(
                 0, 
                 "STATIC",              // ボタンクラス名
-                "User Division",           // ボタンに表示するテキスト
+                "Division",           // ボタンに表示するテキスト
                 WS_CHILD | WS_VISIBLE | ES_CENTER, // 子ウィンドウとして表示
                 20, 150, 300, 30,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
@@ -204,6 +204,105 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
             
             // ユーザー情報ラベルにフォントを適用
             SendMessage(Ent_UserDiv, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
+        }
+
+        // UserPositionのTEXTボックスとラベルの作成
+        {
+            Lab_UserPosition=CreateWindowEx(
+                0, 
+                "STATIC",              // ボタンクラス名
+                "Position",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_CENTER, // 子ウィンドウとして表示
+                330, 150, 100, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Lab_UserPosition, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+
+            Comb_UserPosition = CreateWindowEx(
+                WS_EX_CLIENTEDGE,
+                "COMBOBOX",       // ウィンドウクラス名
+                "",               // 初期表示するテキスト
+                WS_CHILD | WS_VISIBLE | CBS_DROPDOWN, // スタイル
+                330, 170, 100, 100, // 位置とサイズ (x, y, width, height)
+                hwnd,             // 親ウィンドウのハンドル
+                (HMENU)1,         // コントロールID
+                GetModuleHandle(NULL),
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Comb_UserPosition, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
+        }
+
+        // AuthorityのTEXTボックスとラベルの作成
+        {
+            Lab_Authority=CreateWindowEx(
+                0, 
+                "STATIC",              // ボタンクラス名
+                "Position",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_CENTER, // 子ウィンドウとして表示
+                20, 220, 100, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Lab_Authority, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+
+            Comb_Authority = CreateWindowEx(
+                WS_EX_CLIENTEDGE,
+                "COMBOBOX",       // ウィンドウクラス名
+                "",               // 初期表示するテキスト
+                WS_CHILD | WS_VISIBLE | CBS_DROPDOWN, // スタイル
+                20, 240, 100, 100, // 位置とサイズ (x, y, width, height)
+                hwnd,             // 親ウィンドウのハンドル
+                (HMENU)1,         // コントロールID
+                GetModuleHandle(NULL),
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Comb_Authority, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
+        }
+
+        // UserPWのTEXTボックスとラベルの作成
+        {
+            Lab_UserPW=CreateWindowEx(
+                0, 
+                "STATIC",              // ボタンクラス名
+                "Password",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_CENTER, // 子ウィンドウとして表示
+                130, 220, 100, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Lab_UserPW, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+
+            Ent_UserPW = CreateWindowEx(
+                WS_EX_CLIENTEDGE,
+                "EDIT",              // ボタンクラス名
+                "",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL, // 子ウィンドウとして表示
+                130, 240, 100, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                GetModuleHandle(NULL),
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Ent_UserPW, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
         }
 
         // ユーザー検索ボタンを作成
