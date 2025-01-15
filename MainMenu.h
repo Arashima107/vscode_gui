@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include "variable_number.h"
+#include "Users.h"
 
 /**
  * @class MainMenu
@@ -10,6 +11,7 @@
  */
 class MainMenu {
 private:
+    static Users login_user;
     char username[32] = ""; ///< ユーザー名を格納する文字配列
     char authority[16] = ""; ///< 権限情報を格納する文字配列
     HWND Lab_Title; ///< タイトルラベルのハンドル
@@ -24,7 +26,8 @@ public:
      * @brief コンストラクタ
      * @param hInstance アプリケーションインスタンスのハンドル
      */
-    MainMenu(HINSTANCE hInstance);
+    MainMenu(HINSTANCE hInstane, const Users& user);
+    
 
     /**
      * @brief デストラクタ
@@ -62,6 +65,7 @@ private:
      * @return メッセージの処理結果
      */
     static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    void OnBtnUserControlClick();
 
     HINSTANCE hInstance; ///< アプリケーションインスタンスのハンドル
     HWND hwnd; ///< ウィンドウのハンドル
@@ -75,6 +79,7 @@ private:
      * @param lParam メッセージの追加情報
      */
     static void Btn_click(int wmId, HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, MainMenu& menu_instance, int nCmdShow);
+
     static void Close(MainMenu& menu_instance);
 
     const char* className = "MainMEnuClass"; ///< ウィンドウクラス名

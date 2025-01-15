@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include "variable_number.h"
+#include "Users.h"
 
 /**
  * @class MainMenu
@@ -10,26 +11,25 @@
  */
 class UserControl {
 private:
+    static Users login_user;
     char username[32] = ""; ///< ユーザー名を格納する文字配列
     char authority[16] = ""; ///< 権限情報を格納する文字配列
     bool can_edit_manager = false;
     bool can_edit_general = false;
     bool can_edit_viewer = false;
-    HWND Lab_Title; ///< タイトルラベルのハンドル
-    HWND Lab_UserInformation; ///< ユーザー情報ラベルのハンドル
-    HWND Lab_PandaID, Lab_UserName, Lab_UserDiv, Lab_UserPosition, Lab_Authority, Lab_UserPW;
+    static HWND Lab_Title; ///< タイトルラベルのハンドル
+    static HWND Lab_UserInformation; ///< ユーザー情報ラベルのハンドル
+    static HWND Lab_PandaID, Lab_UserName, Lab_UserDiv, Lab_UserPosition, Lab_Authority, Lab_UserPW;
     HWND Ent_PandaID, Ent_UserName, Ent_UserDiv, Comb_UserPosition, Comb_Authority, Ent_UserPW;
-    HWND Btn_UserControl; ///< ユーザーコントロールボタンのハンドル
-    HWND Btn_SearchChart; ///< 検索チャートボタンのハンドル
-    HWND Btn_IssueChart; ///< 発行チャートボタンのハンドル
-    HWND Btn_Close; ///< 閉じるボタンのハンドル
+    HWND Btn_SearchUser; ///< ユーザーコントロールボタンのハンドル
+    HWND Btn_UpdateUser; ///< 検索チャートボタンのハンドル
 
 public:
     /**
      * @brief コンストラクタ
      * @param hInstance アプリケーションインスタンスのハンドル
      */
-    UserControl(HINSTANCE hInstance);
+    UserControl(HINSTANCE hInstance, const Users& user);
 
     /**
      * @brief デストラクタ
@@ -84,4 +84,4 @@ private:
     const char* className = "UserControlClass"; ///< ウィンドウクラス名
 };
 
-#endif // MAINMENU_H
+#endif // USERCONTROL_H

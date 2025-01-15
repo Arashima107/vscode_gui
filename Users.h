@@ -1,3 +1,6 @@
+#ifndef USERS_H
+#define USERS_H
+
 class Users {
 private:
     char db_path[256] = "C:\\users\\water\\desktop\\vscode_gui\\??";
@@ -37,3 +40,5 @@ public:
     bool set_authority(char* users_authority);       // ユーザーの権限を設定
     bool set_Password(char* users_password);         // ユーザーのパスワードを設定
 };
+
+#endif // USERS_H

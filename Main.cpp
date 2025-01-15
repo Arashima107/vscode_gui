@@ -2,14 +2,15 @@
 #include "MainMenu.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    MainMenu window(hInstance);
+    Users login_user;
+    MainMenu mainwindow(hInstance, login_user);
 
-    if (!window.Create("Main Menu")) {
+    if (!mainwindow.Create("Main Menu")) {
         MessageBox(NULL, "Window Creation Failed!", "Error!", MB_ICONEXCLAMATION | MB_OK);
         return 0;
     }
 
-    window.Show(nCmdShow);
+    mainwindow.Show(nCmdShow);
 
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0) > 0) {

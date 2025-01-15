@@ -1,11 +1,27 @@
 #include "UserControl.h"
 #include <stdio.h>
 
-UserControl::UserControl(HINSTANCE hInstance) : hInstance(hInstance), hwnd(NULL) {
+// 静的メンバー変数の定義
+HWND UserControl::Lab_Title = NULL;
+HWND UserControl::Lab_UserInformation = NULL;
+HWND UserControl::Lab_PandaID = NULL;
+HWND UserControl::Lab_UserName = NULL;
+HWND UserControl::Lab_UserDiv = NULL;
+HWND UserControl::Lab_UserPosition = NULL;
+HWND UserControl::Lab_Authority = NULL;
+HWND UserControl::Lab_UserPW = NULL;
+Users UserControl::login_user;
+
+
+UserControl::UserControl(HINSTANCE hInstance, const Users& user) : hInstance(hInstance), hwnd(NULL) {
+    login_user = user;
+    strncat(username, login_user.get_pandaID(), sizeof(username) - strlen(username) - 1);
+    strncat(authority, login_user.get_authority(), sizeof(authority) - strlen(authority) - 1);
+
     WNDCLASSEX wc = {0};
     wc.cbSize = sizeof(WNDCLASSEX);
     wc.style = 0;
-    wc.lpfnWndProc = UserControl::WndProc; // ウィンドウプロシージャを設定
+    wc.lpfnWndProc = WndProc; // ウィンドウプロシージャを設定
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
     wc.hInstance = hInstance;
@@ -24,7 +40,7 @@ UserControl::~UserControl() {
 }
 
 bool UserControl::Create(LPCTSTR lpWindowName) {
-     int nWidth = 600, nHeight = 510;
+    int nWidth = 600, nHeight = 510;
     hwnd = CreateWindowEx(
         WS_EX_CLIENTEDGE,
         className,
@@ -34,9 +50,27 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
         NULL, NULL, hInstance, this
     );
 
+    // フォントを作成する関数
+    HFONT hFont_Entry = CreateFont(
+        -MulDiv(12, GetDeviceCaps(GetDC(hwnd), LOGPIXELSY), 72), // フォントの高さ (ポイントサイズからピクセルに変換)
+        0,                  // フォントの幅 (0: 自動調整)
+        0,                  // テキストの角度 (0: 通常)
+        0,                  // ベースラインとX軸の角度 (0: 通常)
+        FW_NORMAL,          // フォントの太さ (FW_NORMAL: 標準)
+        FALSE,              // イタリック体 (FALSE: 通常)
+        FALSE,              // 下線 (FALSE: 無効)
+        FALSE,              // 打ち消し線 (FALSE: 無効)
+        SHIFTJIS_CHARSET,   // 文字セット (SHIFTJIS_CHARSET: 日本語)
+        OUT_DEFAULT_PRECIS, // 出力精度 (OUT_DEFAULT_PRECIS: デフォルト)
+        CLIP_DEFAULT_PRECIS,// クリッピング精度 (CLIP_DEFAULT_PRECIS: デフォルト)
+        DEFAULT_QUALITY,    // 出力品質 (DEFAULT_QUALITY: デフォルト)
+        DEFAULT_PITCH | FF_DONTCARE, // ピッチとファミリー (デフォルト)
+        "MS UI Gothic"      // フォント名 (日本語フォント)
+    );
+
     char login_user_info[128];
     sprintf(login_user_info, "User Name : %s\nAuthority : %s", username, authority);
-    printf("%s\n", login_user_info);
+    // printf("%s\n", login_user_info);
 
     if (hwnd != NULL) {
         // タイトル・ユーザー情報ラベルを作成
@@ -45,7 +79,7 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
             Lab_Title = CreateWindowEx(
                 0, 
                 "STATIC",              // ボタンクラス名
-                "Main Menu",           // ボタンに表示するテキスト
+                "User Control",           // ボタンに表示するテキスト
                 WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
                 10, 10, 200, 36,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
@@ -72,81 +106,142 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
             // ユーザー情報ラベルにフォントを適用
             SendMessage(Lab_UserInformation, WM_SETFONT, (WPARAM)hFont_others, TRUE);
         }
-
-        // ユーザー管理ボタンを作成
+        
+        // PandaIDのTEXTボックスとラベルの作成
         {
-            // ボタンを作成
-            Btn_UserControl=CreateWindowEx(
+            Lab_PandaID=CreateWindowEx(
                 0, 
-                "BUTTON",              // ボタンクラス名
-                "Users Control",           // ボタンに表示するテキスト
-                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
-                50, 150, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
+                "STATIC",              // ボタンクラス名
+                "Panda ID",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_CENTER, // 子ウィンドウとして表示
+                20, 80, 180, 30,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
-                (HMENU)Btn_MainMenu_UserControl,              // ボタンID (WM_COMMANDで識別)
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
                 hInstance, 
                 NULL
             );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Lab_PandaID, WM_SETFONT, (WPARAM)hFont_others, TRUE);
 
-            // ボタンにフォントを適用
-                SendMessage(Btn_UserControl, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+            Ent_PandaID=CreateWindowEx(
+                WS_EX_CLIENTEDGE,
+                "EDIT",              // ボタンクラス名
+                "",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_LEFT, // 子ウィンドウとして表示
+                20, 100, 180, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                GetModuleHandle(NULL),
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Ent_PandaID, WM_SETFONT, (WPARAM)hFont_others, TRUE);
         }
 
-        // チャート検索ボタンを作成
+        // UserNameのTEXTボックスとラベルの作成
         {
-            // ボタンを作成
-            Btn_SearchChart=CreateWindowEx(
+            Lab_UserName=CreateWindowEx(
                 0, 
-                "BUTTON",              // ボタンクラス名
-                "Search Chart",           // ボタンに表示するテキスト
-                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
-                280, 150, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
+                "STATIC",              // ボタンクラス名
+                "User Name",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_CENTER, // 子ウィンドウとして表示
+                210, 80, 180, 30,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
-                (HMENU)Btn_MainMenu_UserControl,              // ボタンID (WM_COMMANDで識別)
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
                 hInstance, 
                 NULL
             );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Lab_UserName, WM_SETFONT, (WPARAM)hFont_others, TRUE);
 
-            // ボタンにフォントを適用
-                SendMessage(Btn_SearchChart, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+            Ent_UserName=CreateWindowEx(
+                WS_EX_CLIENTEDGE,
+                "EDIT",              // ボタンクラス名
+                "",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_LEFT, // 子ウィンドウとして表示
+                210, 100, 180, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                GetModuleHandle(NULL),
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Ent_UserName, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
         }
 
-        // チャート発行ボタンを作成
+        // UserDivisionのTEXTボックスとラベルの作成
         {
-            // ボタンを作成
-            Btn_IssueChart=CreateWindowEx(
+            Lab_UserDiv=CreateWindowEx(
                 0, 
-                "BUTTON",              // ボタンクラス名
-                "Issue Chart",           // ボタンに表示するテキスト
-                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
-                50, 250, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
+                "STATIC",              // ボタンクラス名
+                "User Division",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_CENTER, // 子ウィンドウとして表示
+                20, 150, 300, 30,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
-                (HMENU)Btn_MainMenu_UserControl,              // ボタンID (WM_COMMANDで識別)
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
                 hInstance, 
                 NULL
             );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Lab_UserDiv, WM_SETFONT, (WPARAM)hFont_others, TRUE);
 
-            // ボタンにフォントを適用
-                SendMessage(Btn_IssueChart, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+            Ent_UserDiv=CreateWindowEx(
+                WS_EX_CLIENTEDGE,
+                "EDIT",              // ボタンクラス名
+                "",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL, // 子ウィンドウとして表示
+                20, 170, 300, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                GetModuleHandle(NULL),
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Ent_UserDiv, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
         }
 
-        // CLOSEボタンを作成
+        // ユーザー検索ボタンを作成
         {
             // ボタンを作成
-            Btn_Close=CreateWindowEx(
+            Btn_SearchUser=CreateWindowEx(
                 0, 
                 "BUTTON",              // ボタンクラス名
-                "CLOSE",           // ボタンに表示するテキスト
+                "Search",           // ボタンに表示するテキスト
                 WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
-                280, 250, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
+                300, 400, 100, 50,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
-                (HMENU)Btn_MainMenu_UserControl,              // ボタンID (WM_COMMANDで識別)
+                (HMENU)Btn_UserControl_SearchUser,              // ボタンID (WM_COMMANDで識別)
                 hInstance, 
                 NULL
             );
 
             // ボタンにフォントを適用
-                SendMessage(Btn_Close, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+                SendMessage(Btn_SearchUser, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+        }
+
+        // ユーザー更新ボタンを作成
+        {
+            // ボタンを作成
+            Btn_UpdateUser=CreateWindowEx(
+                0, 
+                "BUTTON",              // ボタンクラス名
+                "Update",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
+                410, 400, 100, 50,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)Btn_UserControl_UpdateUser,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+
+            // ボタンにフォントを適用
+                SendMessage(Btn_UpdateUser, WM_SETFONT, (WPARAM)hFont_others, TRUE);
         }
     }
 
@@ -164,23 +259,40 @@ HWND UserControl::GetHwnd() const {
 
 LRESULT CALLBACK UserControl::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
+        case WM_CTLCOLORSTATIC:{
+            HDC hdcStatic = (HDC)wParam;
+            if ((HWND)lParam != Lab_Title && (HWND)lParam != Lab_UserInformation) { // ラベルの背景色を変更
+
+                // 背景色を設定
+                SetBkColor(hdcStatic, RGB(230, 230, 255)); // 青
+                return (LRESULT)hBrush; // 背景ブラシを返す
+            }else{
+
+                SetBkColor(hdcStatic, RGB(255, 255, 255)); // 背景色を白に設定
+                SetTextColor(hdcStatic, RGB(0, 0, 0));    // 文字色を黒に設定
+                return (LRESULT)CreateSolidBrush(RGB(255, 255, 255)); // 背景色のブラシを返す
+            }
+
+            break;
+        }
         case WM_COMMAND:{
             int wmId = LOWORD(wParam);
             Btn_click(wmId,hwnd, msg, wParam, lParam);
             break;
         }
-        case WM_CTLCOLORSTATIC: {
+        /*case WM_CTLCOLORSTATIC: {
             // STATIC コントロールの背景色を設定
             HDC hdcStatic = (HDC)wParam;
             SetBkColor(hdcStatic, RGB(255, 255, 255)); // 背景色を白に設定
             SetTextColor(hdcStatic, RGB(0, 0, 0));    // 文字色を黒に設定
             return (LRESULT)CreateSolidBrush(RGB(255, 255, 255)); // 背景色のブラシを返す
-        }
+        }*/
         case WM_CLOSE:
             DestroyWindow(hwnd);
             break;
         case WM_DESTROY:
-            PostQuitMessage(0);
+            printf("Close User Control Window!\n");
+            //PostQuitMessage(0);
             break;
         default:
             return DefWindowProc(hwnd, msg, wParam, lParam);

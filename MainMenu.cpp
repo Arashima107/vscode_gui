@@ -1,9 +1,14 @@
 #include "MainMenu.h"
-#include "Users.h"
 #include "UserControl.h"
 #include <stdio.h>
 
-MainMenu::MainMenu(HINSTANCE hInstance) : hInstance(hInstance), hwnd(NULL) {
+Users MainMenu::login_user;
+
+MainMenu::MainMenu(HINSTANCE hInstane, const Users& user) : hInstance(hInstance), hwnd(NULL) {
+    login_user = user;
+    strncat(username, login_user.get_pandaID(), sizeof(username) - strlen(username) - 1);
+    strncat(authority, login_user.get_authority(), sizeof(authority) - strlen(authority) - 1);
+
     WNDCLASSEX wc = {0};
     wc.cbSize = sizeof(WNDCLASSEX);
     wc.style = 0;
@@ -26,10 +31,6 @@ MainMenu::~MainMenu() {
 }
 
 bool MainMenu::Create(LPCTSTR lpWindowName) {
-
-    Users login_user;
-    strncat(username, login_user.get_pandaID(), sizeof(username) - strlen(username) - 1);
-    strncat(authority, login_user.get_authority(), sizeof(authority) - strlen(authority) - 1);
 
     int nWidth = 600, nHeight = 510;
     hwnd = CreateWindowEx(
@@ -86,7 +87,7 @@ bool MainMenu::Create(LPCTSTR lpWindowName) {
                 0, 
                 "BUTTON",              // ボタンクラス名
                 "Users Control",           // ボタンに表示するテキスト
-                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
+                WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, // 子ウィンドウとして表示
                 50, 150, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
                 (HMENU)Btn_MainMenu_UserControl,              // ボタンID (WM_COMMANDで識別)
@@ -169,16 +170,27 @@ HWND MainMenu::GetHwnd() const {
 }
 
 LRESULT CALLBACK MainMenu::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-    MainMenu* menu_instance = nullptr;
+    //MainMenu* menu_instance = nullptr;
+    MainMenu* pThis;
+
+    if (msg == WM_NCCREATE) {
+        pThis = static_cast<MainMenu*>(reinterpret_cast<CREATESTRUCT*>(lParam)->lpCreateParams);
+        SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));
+    } else {
+        pThis = reinterpret_cast<MainMenu*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+    }
 
     switch (msg) {
         case WM_COMMAND:{
-            
-            int wmId = LOWORD(wParam);
+            if (LOWORD(wParam) == Btn_MainMenu_UserControl) {
+                pThis->OnBtnUserControlClick();
+            }
+            break;
+            /* int wmId = LOWORD(wParam);
             
             Btn_click(wmId, hwnd, msg, wParam, lParam, *menu_instance, SW_SHOW);
             // Btn_click(wmId,hwnd, msg, wParam, lParam);
-            break;
+            break;*/
         }
         case WM_CTLCOLORSTATIC: {
             // STATIC コントロールの背景色を設定
@@ -211,19 +223,27 @@ void MainMenu::Btn_click(int wmId, HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
         case Btn_MainMenu_UserControl: {
             printf("Clicked User Control Btn!\n");
             
-            UserControl userControl(menu_instance.hInstance);
+            UserControl userControl(menu_instance.hInstance, login_user);
             if (userControl.Create("User Control")) {
                 userControl.Show(nCmdShow);
             }
             break;
         }
         case Btn_programClose: {
-            printf("Clicked Close Btn!\n");
             PostQuitMessage(0);
             break;
         }
         // 他のボタンの処理を追加する場合はここに書く
         default:
             break;
+    }
+}
+
+void MainMenu::OnBtnUserControlClick() {
+    printf("Clicked User Control Btn!\n");
+    UserControl userControl(hInstance, login_user);
+
+    if (userControl.Create("User Control")) {
+        userControl.Show(SW_SHOW);
     }
 }
