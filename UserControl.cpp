@@ -11,6 +11,7 @@ HWND UserControl::Lab_UserPosition = NULL;
 HWND UserControl::Lab_Authority = NULL;
 HWND UserControl::Lab_UserPW = NULL;
 Users UserControl::login_user;
+Users UserControl::control_user;
 
 
 UserControl::UserControl(HINSTANCE hInstance, const Users& user) : hInstance(hInstance), hwnd(NULL) {

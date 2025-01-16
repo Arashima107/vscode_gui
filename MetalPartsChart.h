@@ -1,15 +1,15 @@
-#ifndef DCRHISTORY_H
-#define DCRHISTORY_H
+#ifndef METALPARTSCHART_H
+#define METALPARTSCHART_H
 
 #include <windows.h>
 #include "variable_number.h"
 #include "Users.h"
 
 /**
- * @class DCRHistory
+ * @class MetalPartsChart
  * @brief メインメニューウィンドウを管理するクラス
  */
-class DCRHistory {
+class MetalPartsChart {
 private:
     static Users login_user;
     char username[32] = ""; ///< ユーザー名を格納する文字配列
@@ -26,13 +26,13 @@ public:
      * @brief コンストラクタ
      * @param hInstance アプリケーションインスタンスのハンドル
      */
-    DCRHistory(HINSTANCE hInstane, const Users& user);
+    MetalPartsChart(HINSTANCE hInstane, const Users& user);
     
 
     /**
      * @brief デストラクタ
      */
-    ~DCRHistory();
+    ~MetalPartsChart();
 
     /**
      * @brief ウィンドウを作成する
@@ -79,9 +79,9 @@ private:
      * @param lParam メッセージの追加情報
      */
 
-    static void Close(DCRHistory& menu_instance);
+    static void Close(MetalPartsChart& menu_instance);
 
-    const char* className = "DCRHistoryClass"; ///< ウィンドウクラス名
+    const char* className = "MetalPartsChartClass"; ///< ウィンドウクラス名
 };
 
-#endif // DCRHISTORY_H
+#endif // METALPARTSCHART_H

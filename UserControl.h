@@ -12,6 +12,7 @@
 class UserControl {
 private:
     static Users login_user;
+    static Users control_user;
     char username[32] = ""; ///< ユーザー名を格納する文字配列
     char authority[16] = ""; ///< 権限情報を格納する文字配列
     bool can_edit_manager = false;
