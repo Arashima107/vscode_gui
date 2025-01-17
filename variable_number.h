@@ -10,6 +10,7 @@
 
 #define Btn_UserControl_SearchUser 2001
 #define Btn_UserControl_UpdateUser 2002
+#define Btn_UserControl_CsvInclude 2003
 
 // グローバル変数としてフォントハンドルを保持
 // hFont_windowtitle: CreateFontを使用して作成されたカスタムフォントのハンドル

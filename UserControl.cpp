@@ -1,5 +1,6 @@
 #include "UserControl.h"
 #include <stdio.h>
+#include <commdlg.h>
 
 // 静的メンバー変数の定義
 HWND UserControl::Lab_Title = NULL;
@@ -353,6 +354,26 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
         // ユーザー検索ボタンを作成
         {
             // ボタンを作成
+            Btn_CsvInclude=CreateWindowEx(
+                0, 
+                "BUTTON",              // ボタンクラス名
+                "CSV File",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
+                190, 400, 100, 50,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)Btn_UserControl_CsvInclude,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+
+            // ボタンにフォントを適用
+                SendMessage(Btn_CsvInclude, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+        }
+
+
+        // ユーザー検索ボタンを作成
+        {
+            // ボタンを作成
             Btn_SearchUser=CreateWindowEx(
                 0, 
                 "BUTTON",              // ボタンクラス名
@@ -457,6 +478,33 @@ void UserControl::Btn_click(int wmId,HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
                 control_user.update_users(login_user.get_edit_userInformation(), login_user.get_edit_approverInformation());
             }
             break;
+        case Btn_UserControl_CsvInclude:
+            {
+                OPENFILENAME ofn;       // 構造体のインスタンス
+                char szFile[260];       // ファイル名を格納するバッファ
+
+                // 構造体のメモリをゼロクリア
+                ZeroMemory(&ofn, sizeof(ofn));
+                ofn.lStructSize = sizeof(ofn);
+                ofn.hwndOwner = hwnd;
+                ofn.lpstrFile = szFile;
+                ofn.lpstrFile[0] = '\0';
+                ofn.nMaxFile = sizeof(szFile);
+                ofn.lpstrFilter = "All\0*.*\0Text\0*.TXT\0";
+                ofn.nFilterIndex = 1;
+                ofn.lpstrFileTitle = NULL;
+                ofn.nMaxFileTitle = 0;
+                ofn.lpstrInitialDir = NULL;
+                ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+                // ファイルダイアログを表示
+                if (GetOpenFileName(&ofn) == TRUE) {
+                    // 選択されたファイルパスを取得
+                    MessageBox(hwnd, ofn.lpstrFile, "Selected File", MB_OK);
+                    printf("CSV File Included from %s\n", ofn.lpstrFile);
+                }
+                
+            }
         default:
             break;
     }

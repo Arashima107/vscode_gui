@@ -42,6 +42,7 @@ private:
     HWND Ent_PandaID, Ent_UserName, Ent_UserDiv, Ent_UserEmail, Comb_UserPosition, Comb_Authority, Ent_UserPW; ///< 各種エントリとコンボボックスのハンドル
     HWND Btn_SearchUser; ///< ユーザー検索ボタンのハンドル
     HWND Btn_UpdateUser; ///< ユーザー更新ボタンのハンドル
+    HWND Btn_CsvInclude;
 
 public:
     /**
