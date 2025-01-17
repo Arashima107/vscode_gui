@@ -61,13 +61,36 @@ void Users::search_users(const char* users_pandaID) {
     char users_authority[32];       // ユーザーの権限（初期値: "View"）
     char users_password[8];             // ユーザーのパスワード（初期値: ""）
 
-    if(set_pandaID(users_pandaID) && 
+    if(set_pandaID(users_pandaID) &&
         set_UserName(users_username) &&
         set_UserDivision(users_userdivision) &&
         set_Position(users_userposition) &&
         set_authority(users_authority) && 
         set_Password(users_password)
+    ){
+        
+    }
+    return;
+}
+
+void Users::search_users() {
+    
+    char users_username[32] = "Unknown";    // ユーザー名（初期値: "Unknown"）
+    char users_userdivision[128] = "Unknown"; // ユーザーの部署（初期値: "Unknown"）
+    char users_userposition[32] = "General";  // ユーザーの役職（初期値: "Unknown"）
+    char users_authority[32] = "View";       // ユーザーの権限（初期値: "View"）
+    char users_password[8] = "";             // ユーザーのパスワード（初期値: ""）
+
+    if( set_UserName(users_username) &&
+        set_UserDivision(users_userdivision) &&
+        set_Position(users_userposition) &&
+        set_authority(users_authority) && 
+        set_Password(users_password)
     )
+    return;
+}
+
+void Users::update_users(bool Edit_UserInfomation, bool Edit_ApproverInformation){
     return;
 }
 
@@ -207,6 +230,84 @@ bool Users::get_edit_approverInformation(){
 bool Users::judge_password(const char* users_password){
     return strcmp(Password, users_password) == 0;
 }
+
+bool Users::authority_set(){
+    if(strcmp(Authority, "View")==0){
+        View = true;
+        Issue_PartsChart = false;
+        Issue_MaterialChart = false;
+        Edit_PartsChart_Designer = false;
+        App_Designer = false;
+        Edit_PartsChart_Manufacturer = false;
+        App_Manufacturer = false;
+        Edit_MaterialChart = false;
+        Edit_UserInformation = false;
+        Edit_ApproverInformation = false;
+        return true;
+    }else if(strcmp(Authority, "G_Designer")==0){
+        View = true;
+        Issue_PartsChart = true;
+        Issue_MaterialChart = false;
+        App_Designer = false;
+        Edit_PartsChart_Manufacturer = false;
+        App_Manufacturer = false;
+        Edit_MaterialChart = false;
+        Edit_UserInformation = false;
+        Edit_ApproverInformation = false;
+        return true;
+    }else if(strcmp(Authority, "M_Designer")==0){
+        View = true;
+        Issue_PartsChart = true;
+        Issue_MaterialChart = false;
+        Edit_PartsChart_Designer = true;
+        App_Designer = true;
+        Edit_PartsChart_Manufacturer = false;
+        App_Manufacturer = false;
+        Edit_MaterialChart = false;
+        Edit_UserInformation = true;
+        Edit_ApproverInformation = false;
+        return true;
+    }else if(strcmp(Authority, "G_Manufacturer")==0){
+        View = true;
+        Issue_PartsChart = true;
+        Issue_MaterialChart = true;
+        Edit_PartsChart_Designer = false;
+        App_Designer = false;
+        Edit_PartsChart_Manufacturer = true;
+        App_Manufacturer = false;
+        Edit_MaterialChart = true;
+        Edit_UserInformation = false;
+        Edit_ApproverInformation = false;
+        return true;
+    }else if(strcmp(Authority, "M_Manufacturer")==0){
+        View = true;
+        Issue_PartsChart = true;
+        Issue_MaterialChart = true;
+        Edit_PartsChart_Designer = true;
+        App_Designer = false;
+        Edit_PartsChart_Manufacturer = true;
+        App_Manufacturer = true;
+        Edit_MaterialChart = true;
+        Edit_UserInformation = true;
+        Edit_ApproverInformation = true;
+        return true;
+    }else if(strcmp(Authority, "Administrator")==0){
+        View = true;
+        Issue_PartsChart = true;
+        Issue_MaterialChart = true;
+        Edit_PartsChart_Designer = true;
+        App_Designer = true;
+        Edit_PartsChart_Manufacturer = true;
+        App_Manufacturer = true;
+        Edit_MaterialChart = true;
+        Edit_UserInformation = true;
+        Edit_ApproverInformation = true;
+        return true;
+    }
+
+    return false;
+}
+
 /**
  * @brief Panda IDを設定します。
  * 
@@ -219,9 +320,7 @@ bool Users::set_pandaID(const char* users_pandaID) {
         snprintf(PandaID, sizeof(PandaID), "%s",users_pandaID);
         return true;
     }else{
-        char countermeasure[128];
-        sprintf(countermeasure, "Use less than %d characters, including only alphabet and numbers.", sizeof(PandaID)/size_char);
-        error_message("Position : Character count error!", countermeasure);
+        user_error_message("Panda-ID",sizeof(PandaID)/size_char);
         return false;
     }
     return false;
@@ -239,9 +338,7 @@ bool Users::set_UserName(const char* users_username) {
         snprintf(UserName, sizeof(UserName), "%s",users_username);
         return true;
     }else{
-        char countermeasure[128];
-        sprintf(countermeasure, "Use less than %d characters, including only alphabet and numbers.", sizeof(UserName)/size_char);
-        error_message("Position : Character count error!", countermeasure);
+        user_error_message("User Name",sizeof(UserName)/size_char);
         return false;
     }
     return false;
@@ -259,9 +356,7 @@ bool Users::set_UserDivision(const char* users_division) {
         snprintf(UserDivision, sizeof(UserDivision), "%s",users_division);
         return true;
     }else{
-        char countermeasure[128];
-        sprintf(countermeasure, "Use less than %d characters, including only alphabet and numbers.", sizeof(UserDivision)/size_char);
-        error_message("Position : Character count error!", countermeasure);
+        user_error_message("User Division",sizeof(UserDivision)/size_char);
         return false;
     }
     return false;
@@ -279,9 +374,7 @@ bool Users::set_Position(const char* users_position) {
         snprintf(UserPosition, sizeof(UserPosition), "%s",users_position);
         return true;
     }else{
-        char countermeasure[128];
-        sprintf(countermeasure, "Use less than %d characters, including only alphabet and numbers.", sizeof(UserPosition)/size_char);
-        error_message("Position : Character count error!", countermeasure);
+        user_error_message("Position",sizeof(UserPosition)/size_char);
         return false;
     }
     return false;
@@ -295,13 +388,20 @@ bool Users::set_Position(const char* users_position) {
  * @return false 設定が失敗した場合
  */
 bool Users::set_authority(const char* users_authority) {
-    if(sizeof(users_authority) < sizeof(Authority)){
+    unsigned char num=0;
+    
+    num+=(strcmp(users_authority, "View")==0);
+    num+=(strcmp(users_authority, "G_Designer")==0);
+    num+=(strcmp(users_authority, "M_Designer")==0);
+    num+=(strcmp(users_authority, "G_Manufacturer")==0);
+    num+=(strcmp(users_authority, "M_Manufacturer")==0);
+    num+=(strcmp(users_authority, "Administrator")==0);
+    
+    if(sizeof(users_authority) < sizeof(Authority) && num == 1){
         snprintf(Authority, sizeof(Authority), "%s",users_authority);
         return true;
     }else{
-        char countermeasure[128];
-        sprintf(countermeasure, "Use less than %d characters, including only alphabet and numbers.", sizeof(Authority)/size_char);
-        error_message("Position : Character count error!", countermeasure);
+        user_error_message("Authority",sizeof(Authority)/size_char);
         return false;
     }
 }
@@ -319,11 +419,19 @@ bool Users::set_Password(const char* users_password) {
         return true;
     }
     else{
-        char countermeasure[128];
-        sprintf(countermeasure, "Use %d characters, including only alphabet and numbers.", sizeof(Password)/size_char);
-        error_message("Position : Character count error!", countermeasure);
+        user_error_message("Password",sizeof(Password)/size_char);
         return false;
     }
 
     return false;
+}
+
+void Users::user_error_message(const char* error_type, int char_count){
+    char error_type_message[128];
+    char countermeasure[128];
+    printf("error:%s\n",error_type);
+    printf("counter:%d\n",char_count);
+    snprintf(error_type_message, sizeof(error_type_message), "%s: Character count error!", error_type);
+    sprintf(countermeasure, "Use %d characters, including only alphabet and numbers.", char_count);
+    error_message(error_type_message, countermeasure);
 }

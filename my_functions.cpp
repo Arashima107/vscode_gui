@@ -42,8 +42,8 @@ void error_message(const char* error_type, const char* error_detail, const char*
     // メッセージボックスを表示
     MessageBoxEx(
         NULL,                    // 親ウィンドウのハンドル（NULLで親なし）
-        wMessageBuffer,          // ワイド文字列のメッセージ
-        L"Error",                // ワイド文字列のタイトル
+        messageBuffer,          // ワイド文字列のメッセージ
+        "Error",                // ワイド文字列のタイトル
         MB_ICONERROR | MB_OK,    // アイコンとボタンのスタイル
         0                        // 言語ID（デフォルト）
     );
@@ -64,8 +64,8 @@ void error_message(const char* error_type, const char* counter_measure){
     // メッセージボックスを表示
     MessageBoxEx(
         NULL,                    // 親ウィンドウのハンドル（NULLで親なし）
-        wMessageBuffer,          // ワイド文字列のメッセージ
-        L"Error",                // ワイド文字列のタイトル
+        messageBuffer,          // ワイド文字列のメッセージ
+        "Error",                // ワイド文字列のタイトル
         MB_ICONERROR | MB_OK,    // アイコンとボタンのスタイル
         0                        // 言語ID（デフォルト）
     );
@@ -84,8 +84,8 @@ void error_message(const char* error_type){
     // メッセージボックスを表示
     MessageBoxEx(
         NULL,                    // 親ウィンドウのハンドル（NULLで親なし）
-        wMessageBuffer,          // ワイド文字列のメッセージ
-        L"Error",                // ワイド文字列のタイトル
+        messageBuffer,          // ワイド文字列のメッセージ
+        "Error",                // ワイド文字列のタイトル
         MB_ICONERROR | MB_OK,    // アイコンとボタンのスタイル
         0                        // 言語ID（デフォルト）
     );

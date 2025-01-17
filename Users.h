@@ -19,7 +19,9 @@ private:
     bool Issue_PartsChart = false;
     bool Issue_MaterialChart = false;
     bool Edit_PartsChart_Designer = false;
+    bool App_Designer = false;
     bool Edit_PartsChart_Manufacturer = false;
+    bool App_Manufacturer = false;
     bool Edit_MaterialChart = false;
     bool Edit_UserInformation = false;
     bool Edit_ApproverInformation = false;
@@ -30,6 +32,7 @@ public:
     Users(const char* user_pandaID);         // Panda ID を指定するコンストラクタ
 
     // ユーザー情報の検索
+    void search_users();  // Panda ID でユーザーを検索
     void search_users(const char* users_pandaID);  // Panda ID でユーザーを検索
     void update_users(bool Edit_UserInfomation, bool Edit_ApproverInformation);
 
@@ -52,12 +55,15 @@ public:
     bool judge_password(const char* users_password);  // パスワードが一致するか判定
 
     // ユーザー情報の設定関数
+    bool authority_set();
     bool set_pandaID(const char* users_pandaID);           // Panda ID を設定
     bool set_UserName(const char* users_username);         // ユーザー名を設定
     bool set_UserDivision(const char* users_division);     // ユーザーの部署を設定
     bool set_Position(const char* users_position);         // ユーザーの役職を設定
     bool set_authority(const char* users_authority);       // ユーザーの権限を設定
     bool set_Password(const char* users_password);         // ユーザーのパスワードを設定
+
+    void user_error_message(const char* error_type, int char_count);
 
 };
 

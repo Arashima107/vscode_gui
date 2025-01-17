@@ -10,6 +10,7 @@ HWND UserControl::Lab_UserDiv = NULL;
 HWND UserControl::Lab_UserPosition = NULL;
 HWND UserControl::Lab_Authority = NULL;
 HWND UserControl::Lab_UserPW = NULL;
+HWND UserControl::Lab_UserEmail = NULL;
 Users UserControl::login_user;
 Users UserControl::control_user;
 
@@ -209,6 +210,7 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
 
         // UserPositionのTEXTボックスとラベルの作成
         {
+            short int count_position_type = sizeof(position_type)/sizeof(position_type[0]);
             Lab_UserPosition=CreateWindowEx(
                 0, 
                 "STATIC",              // ボタンクラス名
@@ -229,7 +231,7 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
                 "COMBOBOX",       // ウィンドウクラス名
                 "",               // 初期表示するテキスト
                 WS_CHILD | WS_VISIBLE | CBS_DROPDOWN, // スタイル
-                330, 170, 100, 100, // 位置とサイズ (x, y, width, height)
+                330, 170, 100, 30*count_position_type, // 位置とサイズ (x, y, width, height)
                 hwnd,             // 親ウィンドウのハンドル
                 (HMENU)1,         // コントロールID
                 GetModuleHandle(NULL),
@@ -238,16 +240,54 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
             
             // ユーザー情報ラベルにフォントを適用
             SendMessage(Comb_UserPosition, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
+
+            for(int i = 0;i<count_position_type;i++){
+                SendMessage(Comb_UserPosition, CB_ADDSTRING, 0, (LPARAM)position_type[i]);
+            }
         }
 
+        // UserDivisionのTEXTボックスとラベルの作成
+        {
+            Lab_UserEmail=CreateWindowEx(
+                0, 
+                "STATIC",              // ボタンクラス名
+                "Email",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_CENTER, // 子ウィンドウとして表示
+                20, 220, 300, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                hInstance, 
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Lab_UserEmail, WM_SETFONT, (WPARAM)hFont_others, TRUE);
+
+            Ent_UserEmail=CreateWindowEx(
+                WS_EX_CLIENTEDGE,
+                "EDIT",              // ボタンクラス名
+                "",           // ボタンに表示するテキスト
+                WS_CHILD | WS_VISIBLE | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL, // 子ウィンドウとして表示
+                20, 240, 300, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                hwnd,                  // 親ウィンドウのハンドル
+                (HMENU)1,              // ボタンID (WM_COMMANDで識別)
+                GetModuleHandle(NULL),
+                NULL
+            );
+            
+            // ユーザー情報ラベルにフォントを適用
+            SendMessage(Ent_UserEmail, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
+        }
+        
         // AuthorityのTEXTボックスとラベルの作成
         {
+            short int count_authority_type = sizeof(authority_type)/sizeof(authority_type[0]);
             Lab_Authority=CreateWindowEx(
                 0, 
                 "STATIC",              // ボタンクラス名
-                "Position",           // ボタンに表示するテキスト
+                "Authority",           // ボタンに表示するテキスト
                 WS_CHILD | WS_VISIBLE | ES_CENTER, // 子ウィンドウとして表示
-                20, 220, 100, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                20, 290, 200, 30,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
                 (HMENU)1,              // ボタンID (WM_COMMANDで識別)
                 hInstance, 
@@ -262,7 +302,7 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
                 "COMBOBOX",       // ウィンドウクラス名
                 "",               // 初期表示するテキスト
                 WS_CHILD | WS_VISIBLE | CBS_DROPDOWN, // スタイル
-                20, 240, 100, 100, // 位置とサイズ (x, y, width, height)
+                20, 310, 200, 30*count_authority_type, // 位置とサイズ (x, y, width, height)
                 hwnd,             // 親ウィンドウのハンドル
                 (HMENU)1,         // コントロールID
                 GetModuleHandle(NULL),
@@ -271,6 +311,10 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
             
             // ユーザー情報ラベルにフォントを適用
             SendMessage(Comb_Authority, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
+
+            for(int i = 0;i<count_authority_type;i++){
+                SendMessage(Comb_Authority, CB_ADDSTRING, 0, (LPARAM)authority_type[i]);
+            }
         }
 
         // UserPWのTEXTボックスとラベルの作成
@@ -280,7 +324,7 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
                 "STATIC",              // ボタンクラス名
                 "Password",           // ボタンに表示するテキスト
                 WS_CHILD | WS_VISIBLE | ES_CENTER, // 子ウィンドウとして表示
-                130, 220, 100, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                230, 290, 100, 30,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
                 (HMENU)1,              // ボタンID (WM_COMMANDで識別)
                 hInstance, 
@@ -295,7 +339,7 @@ bool UserControl::Create(LPCTSTR lpWindowName) {
                 "EDIT",              // ボタンクラス名
                 "",           // ボタンに表示するテキスト
                 WS_CHILD | WS_VISIBLE | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL, // 子ウィンドウとして表示
-                130, 240, 100, 30,       // ボタンの位置とサイズ (x, y, width, height)
+                230, 310, 100, 30,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
                 (HMENU)1,              // ボタンID (WM_COMMANDで識別)
                 GetModuleHandle(NULL),
@@ -401,9 +445,17 @@ LRESULT CALLBACK UserControl::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
 }
 
 void UserControl::Btn_click(int wmId,HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
+    int result;
     switch (wmId){
-        case Btn_MainMenu_UserControl:
-            MessageBox(hwnd, "UserControl Clicked!", "Info", MB_OK | MB_ICONINFORMATION);
+        case Btn_UserControl_SearchUser:
+            //MessageBox(hwnd, "Would you like to update user information?", "User Update", MB_ICONQUESTION | MB_YESNO);
+            control_user.search_users();
+            break;
+        case Btn_UserControl_UpdateUser:
+            result = MessageBox(hwnd, "Would you like to update user information?", "User Update", MB_ICONQUESTION | MB_YESNO);
+            if(result == IDYES){
+                control_user.update_users(login_user.get_edit_userInformation(), login_user.get_edit_approverInformation());
+            }
             break;
         default:
             break;
