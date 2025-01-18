@@ -1,5 +1,8 @@
 // このヘッダーファイルは、Windowsアプリケーションで使用される定数とグローバル変数を定義します。
 
+#define MAX_LINE_LENGTH 16384
+#define MAX_FIELD_LENGTH 256
+
 // Btn_Close: 閉じるボタンの識別子を定義します。
 #define Btn_programClose -99
 

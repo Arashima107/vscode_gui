@@ -130,6 +130,10 @@ const char* Users::get_userposition(){
     return UserPosition;
 }
 
+const char* Users::get_usermail(){
+    return UserMail;
+}
+
 /**
  * @brief ユーザーの権限を取得します。
  * 
@@ -375,6 +379,17 @@ bool Users::set_Position(const char* users_position) {
         return true;
     }else{
         user_error_message("Position",sizeof(UserPosition)/size_char);
+        return false;
+    }
+    return false;
+}
+
+bool Users::set_UserMail(const char* users_mail){
+    if(sizeof(users_mail) < sizeof(UserMail)){
+        snprintf(UserMail, sizeof(UserMail), "%s",users_mail);
+        return true;
+    }else{
+        user_error_message("Mail",sizeof(UserMail)/size_char);
         return false;
     }
     return false;

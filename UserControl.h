@@ -36,10 +36,11 @@ private:
     bool can_edit_manager = false; ///< マネージャー編集権限
     bool can_edit_general = false; ///< 一般編集権限
     bool can_edit_viewer = false; ///< ビューアー編集権限
+    static UserControl* instance;
     static HWND Lab_Title; ///< タイトルラベルのハンドル
     static HWND Lab_UserInformation; ///< ユーザー情報ラベルのハンドル
     static HWND Lab_PandaID, Lab_UserName, Lab_UserDiv, Lab_UserEmail, Lab_UserPosition, Lab_Authority, Lab_UserPW; ///< 各種ラベルのハンドル
-    HWND Ent_PandaID, Ent_UserName, Ent_UserDiv, Ent_UserEmail, Comb_UserPosition, Comb_Authority, Ent_UserPW; ///< 各種エントリとコンボボックスのハンドル
+    static HWND Ent_PandaID, Ent_UserName, Ent_UserDiv, Ent_UserEmail, Comb_UserPosition, Comb_Authority, Ent_UserPW; ///< 各種エントリとコンボボックスのハンドル
     HWND Btn_SearchUser; ///< ユーザー検索ボタンのハンドル
     HWND Btn_UpdateUser; ///< ユーザー更新ボタンのハンドル
     HWND Btn_CsvInclude;
@@ -101,6 +102,7 @@ private:
      * @param lParam メッセージの追加情報
      */
     static void Btn_click(int wmId, HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    static void csv_input_user(HWND hwnd, const char *csv_path);
 
     const char* className = "UserControlClass"; ///< ウィンドウクラス名
 };

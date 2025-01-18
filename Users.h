@@ -13,6 +13,7 @@ private:
     char UserName[32] = "Unknown";    // ユーザー名（初期値: "Unknown"）
     char UserDivision[128] = "Unknown"; // ユーザーの部署（初期値: "Unknown"）
     char UserPosition[32] = "Unknown";  // ユーザーの役職（初期値: "Unknown"）
+    char UserMail[64] = "Unknown";
     char Authority[32] = "View";       // ユーザーの権限（初期値: "View"）
     char Password[8] = "";             // ユーザーのパスワード（初期値: ""）
     bool View = true;
@@ -41,6 +42,7 @@ public:
     const char* get_username();         // ユーザー名を返す
     const char* get_userdivision();     // ユーザーの部署を返す
     const char* get_userposition();     // ユーザーの役職を返す
+    const char* get_usermail();
     const char* get_authority();        // ユーザーの権限を返す
     bool get_view();                     // View 権限を返す
     bool get_issue_partsChart();         // Issue_PartsChart 権限を返す
@@ -60,6 +62,7 @@ public:
     bool set_UserName(const char* users_username);         // ユーザー名を設定
     bool set_UserDivision(const char* users_division);     // ユーザーの部署を設定
     bool set_Position(const char* users_position);         // ユーザーの役職を設定
+    bool set_UserMail(const char* users_mail);
     bool set_authority(const char* users_authority);       // ユーザーの権限を設定
     bool set_Password(const char* users_password);         // ユーザーのパスワードを設定
 
