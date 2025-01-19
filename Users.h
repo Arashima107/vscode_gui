@@ -34,7 +34,6 @@ public:
 
     // ユーザー情報の検索
     void search_users();  // Panda ID でユーザーを検索
-    void search_users(const char* users_pandaID);  // Panda ID でユーザーを検索
     void update_users(bool Edit_UserInfomation, bool Edit_ApproverInformation);
 
     // ユーザー情報の取得関数

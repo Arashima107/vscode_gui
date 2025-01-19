@@ -1,4 +1,5 @@
 #include "UserControl.h"
+#include "my_functions.h"
 #include <stdio.h>
 #include <commdlg.h>
 #include <stdio.h>
@@ -572,7 +573,7 @@ void UserControl::Btn_click(int wmId,HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
                 ofn.lpstrFile = szFile;
                 ofn.lpstrFile[0] = '\0';
                 ofn.nMaxFile = sizeof(szFile);
-                ofn.lpstrFilter = "Csv\0*.csv\0Text\0*.TXT\0All\0*.*\0";
+                ofn.lpstrFilter = "Csv(*.csv)\0*.csv\0Text(*.txt)\0*.TXT\0All(*.*)\0*.*\0";
                 ofn.nFilterIndex = 1;
                 ofn.lpstrFileTitle = NULL;
                 ofn.nMaxFileTitle = 0;
@@ -665,6 +666,6 @@ void UserControl::csv_input_user(HWND hwnd, const char* csv_path){
         }
         fclose(file);
     } else {
-        MessageBox(hwnd, "Failed to open the file.", "Error", MB_OK | MB_ICONERROR);
+        error_message("Failed to open the file.");
     }
 }
