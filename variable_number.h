@@ -4,7 +4,7 @@
 #define MAX_FIELD_LENGTH 256
 
 // Btn_Close: 閉じるボタンの識別子を定義します。
-#define Btn_programClose -99
+#define Btn_programClose 0001
 
 // ボタンの識別子を定義
 #define Btn_MainMenu_UserControl 1001
@@ -14,6 +14,10 @@
 #define Btn_UserControl_SearchUser 2001
 #define Btn_UserControl_UpdateUser 2002
 #define Btn_UserControl_CsvInclude 2003
+
+#define Btn_SearchChart_Search 3001
+#define Btn_SearchChart_Clear 3002
+#define Comb_SearchChart_ChartType 3101
 
 // グローバル変数としてフォントハンドルを保持
 // hFont_windowtitle: CreateFontを使用して作成されたカスタムフォントのハンドル

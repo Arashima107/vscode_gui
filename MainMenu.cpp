@@ -1,5 +1,7 @@
 #include "MainMenu.h"
 #include "UserControl.h"
+#include "SearchChart.h"
+#include "my_functions.h"
 #include <stdio.h>
 
 Users MainMenu::login_user;
@@ -110,7 +112,7 @@ bool MainMenu::Create(LPCTSTR lpWindowName) {
                 WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
                 280, 150, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
-                (HMENU)Btn_programClose,              // ボタンID (WM_COMMANDで識別)
+                (HMENU)Btn_MainMenu_SearchChart,              // ボタンID (WM_COMMANDで識別)
                 hInstance, 
                 NULL
             );
@@ -129,7 +131,7 @@ bool MainMenu::Create(LPCTSTR lpWindowName) {
                 WS_CHILD | WS_VISIBLE, // 子ウィンドウとして表示
                 50, 250, 150, 70,       // ボタンの位置とサイズ (x, y, width, height)
                 hwnd,                  // 親ウィンドウのハンドル
-                (HMENU)Btn_programClose,              // ボタンID (WM_COMMANDで識別)
+                (HMENU)Btn_MainMenu_IssueChart,              // ボタンID (WM_COMMANDで識別)
                 hInstance, 
                 NULL
             );
@@ -171,7 +173,6 @@ HWND MainMenu::GetHwnd() const {
 }
 
 LRESULT CALLBACK MainMenu::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-    //MainMenu* menu_instance = nullptr;
     MainMenu* pThis;
 
     if (msg == WM_NCCREATE) {
@@ -183,15 +184,23 @@ LRESULT CALLBACK MainMenu::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
     switch (msg) {
         case WM_COMMAND:{
-            if (LOWORD(wParam) == Btn_MainMenu_UserControl) {
-                pThis->OnBtnUserControlClick();
+            switch(LOWORD(wParam)){
+                case Btn_MainMenu_UserControl: 
+                    pThis->OnBtnUserControlClick();
+                    break;
+                
+                case Btn_MainMenu_SearchChart:
+                    printf("Clicked\n");
+                    pThis->OnBtnSearchChartClick();
+                    break;
+                case Btn_MainMenu_IssueChart:
+                    printf("Issue Chart Clicked!\n");
+                    break;
+                case Btn_programClose:
+                    PostQuitMessage(0);
+                    break;
             }
             break;
-            /* int wmId = LOWORD(wParam);
-            
-            Btn_click(wmId, hwnd, msg, wParam, lParam, *menu_instance, SW_SHOW);
-            // Btn_click(wmId,hwnd, msg, wParam, lParam);
-            break;*/
         }
         case WM_CTLCOLORSTATIC: {
             // STATIC コントロールの背景色を設定
@@ -243,8 +252,15 @@ void MainMenu::Btn_click(int wmId, HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 void MainMenu::OnBtnUserControlClick() {
     printf("Clicked User Control Btn!\n");
     UserControl userControl(hInstance, login_user);
-
     if (userControl.Create("User Control")) {
         userControl.Show(SW_SHOW);
+    }
+}
+
+void MainMenu::OnBtnSearchChartClick() {
+    printf("Clicked Search Chart Btn!\n");
+    SearchChart searchchart(hInstance, login_user);
+    if (searchchart.Create("Chart Search")) {
+        searchchart.Show(SW_SHOW);
     }
 }
