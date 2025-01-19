@@ -215,6 +215,7 @@ void SearchChart::Selected_ChartType(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
         "MS UI Gothic"      // フォント名 (日本語フォント)
     );
     
+    HWND hEntryBox;
     if (HIWORD(wParam) == CBN_SELCHANGE && LOWORD(wParam) == Comb_SearchChart_ChartType) {
         int index = SendMessage(Comb_Select_ChartType, CB_GETCURSEL, 0, 0);
         if (index != CB_ERR) {
