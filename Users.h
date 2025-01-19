@@ -5,10 +5,9 @@
 
 class Users {
 private:
-    char db_path[256] = "C:\\users\\water\\desktop\\vscode_gui\\??";
 
     // ユーザーの情報を保持するメンバー変数
-    int id = -1;                      // ユーザーのID（初期値: -1）
+    short int id = -1;                      // ユーザーのID（初期値: -1）
     char PandaID[16] = "Unknown";     // ユーザーのPanda ID（初期値: "Unknown"）
     char UserName[32] = "Unknown";    // ユーザー名（初期値: "Unknown"）
     char UserDivision[128] = "Unknown"; // ユーザーの部署（初期値: "Unknown"）

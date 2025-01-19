@@ -20,9 +20,7 @@ private:
     HWND Btn_Search; ///< ユーザーコントロールボタンのハンドル
     HWND Lab_Select_ChartType;
     static HWND Comb_Select_ChartType;
-    HWND Btn_SearchChart; ///< 検索チャートボタンのハンドル
-    HWND Btn_IssueChart; ///< 発行チャートボタンのハンドル
-    HWND Btn_Close; ///< 閉じるボタンのハンドル
+    static HWND Lab_PartsNo, Lab_PartsName, Lab_BusinessDiv, Lab_;
 
 public:
     /**

@@ -147,6 +147,7 @@ LRESULT CALLBACK SearchChart::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
             if (LOWORD(wParam) == Btn_MainMenu_UserControl) {
                 //pThis->OnBtnUserControlClick();
             }
+            Selected_ChartType(hwnd, msg, wParam, lParam);
             break;
         }
         case WM_CTLCOLORSTATIC: {
@@ -197,15 +198,51 @@ void SearchChart::Btn_click(int wmId, HWND hwnd, UINT msg, WPARAM wParam, LPARAM
 }
 
 void SearchChart::Selected_ChartType(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    HFONT hFont_Entry = CreateFont(
+        -MulDiv(12, GetDeviceCaps(GetDC(hwnd), LOGPIXELSY), 72), // フォントの高さ (ポイントサイズからピクセルに変換)
+        0,                  // フォントの幅 (0: 自動調整)
+        0,                  // テキストの角度 (0: 通常)
+        0,                  // ベースラインとX軸の角度 (0: 通常)
+        FW_NORMAL,          // フォントの太さ (FW_NORMAL: 標準)
+        FALSE,              // イタリック体 (FALSE: 通常)
+        FALSE,              // 下線 (FALSE: 無効)
+        FALSE,              // 打ち消し線 (FALSE: 無効)
+        SHIFTJIS_CHARSET,   // 文字セット (SHIFTJIS_CHARSET: 日本語)
+        OUT_DEFAULT_PRECIS, // 出力精度 (OUT_DEFAULT_PRECIS: デフォルト)
+        CLIP_DEFAULT_PRECIS,// クリッピング精度 (CLIP_DEFAULT_PRECIS: デフォルト)
+        DEFAULT_QUALITY,    // 出力品質 (DEFAULT_QUALITY: デフォルト)
+        DEFAULT_PITCH | FF_DONTCARE, // ピッチとファミリー (デフォルト)
+        "MS UI Gothic"      // フォント名 (日本語フォント)
+    );
+    
     if (HIWORD(wParam) == CBN_SELCHANGE && LOWORD(wParam) == Comb_SearchChart_ChartType) {
         int index = SendMessage(Comb_Select_ChartType, CB_GETCURSEL, 0, 0);
         if (index != CB_ERR) {
             // 選択されたチャートタイプに応じてウィンドウ内の配置を変更する処理をここに追加
             switch (index) {
                 case 0:
+                    printf("Select No. 0\n");
+                    DestroyWindow(hEntryBox);
+                    hEntryBox=nullptr;
+                    UpdateWindow(hwnd);
                     // チャートタイプ0に応じた配置変更
                     break;
                 case 1:
+                    printf("Select No. 1 \n");
+                    // ENTRYボックスを作成
+                    hEntryBox = CreateWindowEx(
+                        WS_EX_CLIENTEDGE,
+                        "EDIT",            // ウィンドウクラス名
+                        "",                // 初期表示するテキスト
+                        WS_CHILD | WS_VISIBLE | ES_LEFT, // スタイル
+                        50, 100, 200, 30,  // 位置とサイズ (x, y, width, height)
+                        hwnd,              // 親ウィンドウのハンドル
+                        (HMENU)1,          // コントロールID
+                        GetModuleHandle(NULL),
+                        NULL
+                    );
+                    // ENTRYボックスにフォントを適用
+                    SendMessage(hEntryBox, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
                     // チャートタイプ1に応じた配置変更
                     break;
                 // 他のチャートタイプに応じた処理を追加

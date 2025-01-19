@@ -19,6 +19,11 @@
 #define Btn_SearchChart_Clear 3002
 #define Comb_SearchChart_ChartType 3101
 
+const char *user_db_path = "C:\\users\\water\\desktop\\vscode_gui\\??";
+const char *parts_db_path = "C:\\users\\water\\desktop\\vscode_gui\\??";
+const char *assemble_db_path = "C:\\users\\water\\desktop\\vscode_gui\\??";
+const char *selectitem_db_path = "C:\\users\\water\\desktop\\vscode_gui\\??";
+
 // グローバル変数としてフォントハンドルを保持
 // hFont_windowtitle: CreateFontを使用して作成されたカスタムフォントのハンドル
 extern HFONT hFont_windowtitle;
