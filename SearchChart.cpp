@@ -225,6 +225,7 @@ void SearchChart::Selected_ChartType(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
                     printf("Select No. 0\n");
                     DestroyWindow(hEntryBox);
                     hEntryBox=nullptr;
+                    InvalidateRect(hwnd, NULL, TRUE);
                     UpdateWindow(hwnd);
                     // チャートタイプ0に応じた配置変更
                     break;
