@@ -190,12 +190,13 @@ LRESULT CALLBACK MainMenu::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     break;
                 
                 case Btn_MainMenu_SearchChart:
-                    printf("Clicked\n");
                     pThis->OnBtnSearchChartClick();
                     break;
+
                 case Btn_MainMenu_IssueChart:
-                    printf("Issue Chart Clicked!\n");
+                    pThis->OnBtnIssueChartClick();
                     break;
+
                 case Btn_programClose:
                     PostQuitMessage(0);
                     break;
@@ -227,12 +228,10 @@ void MainMenu::Close(MainMenu& menu_instance) {
         menu_instance.hwnd = NULL;
     }
 }
-
+/*
 void MainMenu::Btn_click(int wmId, HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, MainMenu& menu_instance, int nCmdShow) {
     switch (wmId) {
         case Btn_MainMenu_UserControl: {
-            printf("Clicked User Control Btn!\n");
-            
             UserControl userControl(menu_instance.hInstance, login_user);
             if (userControl.Create("User Control")) {
                 userControl.Show(nCmdShow);
@@ -248,6 +247,7 @@ void MainMenu::Btn_click(int wmId, HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
             break;
     }
 }
+*/
 
 void MainMenu::OnBtnUserControlClick() {
     printf("Clicked User Control Btn!\n");
@@ -263,4 +263,8 @@ void MainMenu::OnBtnSearchChartClick() {
     if (searchchart.Create("Chart Search")) {
         searchchart.Show(SW_SHOW);
     }
+}
+
+void MainMenu::OnBtnIssueChartClick(){
+    printf("Issue Chart Clicked!\n");
 }

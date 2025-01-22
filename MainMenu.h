@@ -67,6 +67,7 @@ private:
     static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
     void OnBtnUserControlClick();
     void OnBtnSearchChartClick();
+    void OnBtnIssueChartClick();
 
     HINSTANCE hInstance; ///< アプリケーションインスタンスのハンドル
     HWND hwnd; ///< ウィンドウのハンドル

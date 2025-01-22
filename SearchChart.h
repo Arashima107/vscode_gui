@@ -20,7 +20,8 @@ private:
     HWND Btn_Search; ///< ユーザーコントロールボタンのハンドル
     HWND Lab_Select_ChartType;
     static HWND Comb_Select_ChartType;
-    static HWND Lab_PartsNo, Lab_PartsName, Lab_BusinessDiv, Lab_;
+    static HWND Lab_PartsNo, Lab_PartsName, Lab_BusinessDiv;
+    static HWND Ent_PartsNo, Ent_PartsName, Comb_BusinessDiv;
 
 public:
     /**
@@ -81,6 +82,7 @@ private:
      */
     static void Btn_click(int wmId, HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, SearchChart& menu_instance, int nCmdShow);
     static void Selected_ChartType(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    static void update_MoldParts(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
     static void Close(SearchChart& menu_instance);
 

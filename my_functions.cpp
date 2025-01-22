@@ -90,3 +90,13 @@ void error_message(const char* error_type){
         0                        // 言語ID（デフォルト）
     );
 }
+
+bool SafeDestroyWindow(HWND &hWnd) {
+    if (hWnd) {
+        DestroyWindow(hWnd);
+        hWnd = NULL;
+        return true;
+    }else{
+        return false;
+    }
+}
