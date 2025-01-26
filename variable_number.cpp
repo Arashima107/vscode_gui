@@ -39,3 +39,24 @@ HFONT hFont_others = CreateFont(
 
 // ブラシを作成（背景色：青）
 HBRUSH hBrush = CreateSolidBrush(RGB(230, 230, 255));
+
+char Business_div[2][16] = {
+    "CPS",
+    "EPS"
+};  // 実体を定義
+
+char position_type[4][16] = { ///< 役職タイプの配列
+    "General",
+    "STL",
+    "TM/TL",
+    "GM"
+};
+
+char authority_type[6][32]= { ///< 権限タイプの配列
+    "View",
+    "Administrator",
+    "General Designer",
+    "General Manufacturer",
+    "Manager Designer",
+    "Manager Manufacturer"
+};

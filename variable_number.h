@@ -35,3 +35,9 @@ extern HBRUSH hBrush; // 背景色用のブラシ
 // ここに新しい定数やグローバル変数を追加できます。
 // 例: #define Btn_NewButton 1004
 // 例: extern int g_someGlobalVariable;
+
+extern char Business_div[2][16];
+
+extern char position_type[4][16];
+
+extern char authority_type[6][32];

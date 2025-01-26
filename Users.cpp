@@ -1,5 +1,6 @@
 #include "Users.h"
 #include "my_functions.h"
+#include "variable_number.h"
 #include <Windows.h>
 #include <stdio.h>
 #include <lmcons.h>
@@ -43,8 +44,9 @@ void Users::search_users() {
     char users_username[32] = "Unknown";    // ユーザー名（初期値: "Unknown"）
     char users_userdivision[128] = "Unknown"; // ユーザーの部署（初期値: "Unknown"）
     char users_userposition[32] = "General";  // ユーザーの役職（初期値: "Unknown"）
-    char users_authority[32] = "View";       // ユーザーの権限（初期値: "View"）
+    char users_authority[32];       // ユーザーの権限（初期値: "View"）
     char users_password[8] = "";             // ユーザーのパスワード（初期値: ""）
+    strncpy(users_authority, authority_type[0], sizeof(users_authority) - 1);
 
     /*
     DBにアクセスし、pandaIDをもとにデータを検索
@@ -381,14 +383,12 @@ bool Users::set_UserMail(const char* users_mail){
  * @return false 設定が失敗した場合
  */
 bool Users::set_authority(const char* users_authority) {
-    unsigned char num=0;
-    
-    num+=(strcmp(users_authority, "View")==0);
-    num+=(strcmp(users_authority, "G_Designer")==0);
-    num+=(strcmp(users_authority, "M_Designer")==0);
-    num+=(strcmp(users_authority, "G_Manufacturer")==0);
-    num+=(strcmp(users_authority, "M_Manufacturer")==0);
-    num+=(strcmp(users_authority, "Administrator")==0);
+    char count_authority_type = sizeof(authority_type)/sizeof(authority_type[0]);
+    char num = 0;
+
+    for(int i = 0; i < count_authority_type; i++){
+        num += (strcmp(users_authority, authority_type[i]) == 0);
+    }
     
     if(sizeof(users_authority) < sizeof(Authority) && num == 1){
         snprintf(Authority, sizeof(Authority), "%s",users_authority);

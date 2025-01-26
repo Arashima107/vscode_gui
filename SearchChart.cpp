@@ -11,8 +11,7 @@ HWND SearchChart::Lab_BusinessDiv;
 HWND SearchChart::Ent_PartsNo;
 HWND SearchChart::Ent_PartsName;
 HWND SearchChart::Comb_BusinessDiv;
-
-
+//char SearchChart::chart_type[2][16] = {"Part", "Material"};
 
 SearchChart::SearchChart(HINSTANCE hInstane, const Users& user) : hInstance(hInstance), hwnd(NULL) {
     login_user = user;
@@ -90,7 +89,7 @@ bool SearchChart::Create(LPCTSTR lpWindowName) {
 
         // UserPositionのTEXTボックスとラベルの作成
         {
-            short int count_chart_type = sizeof(chart_type)/sizeof(chart_type[0]);
+            short int count_chart_type = sizeof(chart_type)/sizeof(chart_type[0]);    
             Lab_Select_ChartType=CreateWindowEx(
                 0, 
                 "STATIC",              // ボタンクラス名
@@ -120,7 +119,7 @@ bool SearchChart::Create(LPCTSTR lpWindowName) {
             
             // ユーザー情報ラベルにフォントを適用
             SendMessage(Comb_Select_ChartType, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
-
+            
             for(int i = 0;i<count_chart_type;i++){
                 SendMessage(Comb_Select_ChartType, CB_ADDSTRING, 0, (LPARAM)chart_type[i]);
             }
@@ -239,6 +238,7 @@ void SearchChart::update_MoldParts(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
     if (selected_ChartType!= CB_ERR){
         switch(selected_ChartType){
             case 0:
+            // 
             {
                 Lab_PartsNo = CreateWindowEx(
                     0,
@@ -268,6 +268,7 @@ void SearchChart::update_MoldParts(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                 
                 y+=dy;
             }
+            
             {
                 Lab_PartsName = CreateWindowEx(
                     0,
@@ -297,7 +298,9 @@ void SearchChart::update_MoldParts(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                 
                 y+=dy;
             }
+            // UserPositionのTEXTボックスとラベルの作成
             {
+                short int count_Business_div = sizeof(Business_div)/sizeof(Business_div[0]);    
                 Lab_BusinessDiv = CreateWindowEx(
                     0,
                     "STATIC",
@@ -313,18 +316,24 @@ void SearchChart::update_MoldParts(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
                 Comb_BusinessDiv = CreateWindowEx(
                     WS_EX_CLIENTEDGE,
-                    "EDIT",
-                    "",
-                    WS_CHILD | WS_VISIBLE | ES_LEFT,
-                    x_edit, y, width_edit, 30,
-                    hwnd,
-                    (HMENU)1,
+                    "COMBOBOX",       // ウィンドウクラス名
+                    "",               // 初期表示するテキスト
+                    WS_CHILD | WS_VISIBLE | CBS_DROPDOWN, // スタイル
+                    x_edit, y, width_edit, 30*count_Business_div, // 位置とサイズ (x, y, width, height)
+                    hwnd,             // 親ウィンドウのハンドル
+                    (HMENU)1,         // コントロールID
                     GetModuleHandle(NULL),
                     NULL
                 );
+                
+                // ユーザー情報ラベルにフォントを適用
                 SendMessage(Comb_BusinessDiv, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
                 
                 y+=dy;
+                
+                for(int i = 0;i<count_Business_div;i++){
+                    SendMessage(Comb_BusinessDiv, CB_ADDSTRING, 0, (LPARAM)Business_div[i]);
+                }
             }
 
         }

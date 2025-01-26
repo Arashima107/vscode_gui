@@ -13,10 +13,7 @@ class SearchChart {
 private:
     static Users login_user;
     HWND Lab_Title; ///< タイトルラベルのハンドル
-    char chart_type[2][16] = { ///< 役職タイプの配列
-        "Parts",
-        "Material"
-    };
+    static constexpr char chart_type[2][16] = {"Parts", "Material"};
     HWND Btn_Search; ///< ユーザーコントロールボタンのハンドル
     HWND Lab_Select_ChartType;
     static HWND Comb_Select_ChartType;
