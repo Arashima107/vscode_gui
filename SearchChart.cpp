@@ -8,9 +8,12 @@ HWND SearchChart::Comb_Select_ChartType;
 HWND SearchChart::Lab_PartsNo;
 HWND SearchChart::Lab_PartsName;
 HWND SearchChart::Lab_BusinessDiv;
+HWND SearchChart::Lab_Product;
 HWND SearchChart::Ent_PartsNo;
 HWND SearchChart::Ent_PartsName;
 HWND SearchChart::Comb_BusinessDiv;
+HWND SearchChart::Comb_Product;
+
 //char SearchChart::chart_type[2][16] = {"Part", "Material"};
 
 SearchChart::SearchChart(HINSTANCE hInstane, const Users& user) : hInstance(hInstance), hwnd(NULL) {
@@ -333,6 +336,43 @@ void SearchChart::update_MoldParts(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                 
                 for(int i = 0;i<count_Business_div;i++){
                     SendMessage(Comb_BusinessDiv, CB_ADDSTRING, 0, (LPARAM)Business_div[i]);
+                }
+            }
+
+            {
+                short int count_Business_div = sizeof(Business_div)/sizeof(Business_div[0]);    
+                Lab_Product = CreateWindowEx(
+                    0,
+                    "STATIC",
+                    "Product",
+                    WS_CHILD | WS_VISIBLE | ES_CENTER, 
+                    x_lab, y, width_Lab, 30,
+                    hwnd,
+                    (HMENU)1,
+                    GetModuleHandle(NULL),
+                    NULL
+                );
+                SendMessage(Lab_Product, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
+
+                Comb_Product = CreateWindowEx(
+                    WS_EX_CLIENTEDGE,
+                    "COMBOBOX",       // ウィンドウクラス名
+                    "",               // 初期表示するテキスト
+                    WS_CHILD | WS_VISIBLE | CBS_DROPDOWN, // スタイル
+                    x_edit, y, width_edit, 30*count_Business_div, // 位置とサイズ (x, y, width, height)
+                    hwnd,             // 親ウィンドウのハンドル
+                    (HMENU)1,         // コントロールID
+                    GetModuleHandle(NULL),
+                    NULL
+                );
+                
+                // ユーザー情報ラベルにフォントを適用
+                SendMessage(Comb_Product, WM_SETFONT, (WPARAM)hFont_Entry, TRUE);
+                
+                y+=dy;
+                
+                for(int i = 0;i<count_Business_div;i++){
+                    SendMessage(Comb_Product, CB_ADDSTRING, 0, (LPARAM)Business_div[i]);
                 }
             }
 

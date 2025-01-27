@@ -41,3 +41,4 @@ extern char Business_div[2][16];
 extern char position_type[4][16];
 
 extern char authority_type[6][32];
+

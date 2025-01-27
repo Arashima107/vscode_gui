@@ -17,8 +17,8 @@ private:
     HWND Btn_Search; ///< ユーザーコントロールボタンのハンドル
     HWND Lab_Select_ChartType;
     static HWND Comb_Select_ChartType;
-    static HWND Lab_PartsNo, Lab_PartsName, Lab_BusinessDiv;
-    static HWND Ent_PartsNo, Ent_PartsName, Comb_BusinessDiv;
+    static HWND Lab_PartsNo, Lab_PartsName, Lab_BusinessDiv, Lab_Product;
+    static HWND Ent_PartsNo, Ent_PartsName, Comb_BusinessDiv, Comb_Product;
 
 public:
     /**
